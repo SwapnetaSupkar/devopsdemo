@@ -12,10 +12,13 @@ public static class Serializer
 {
     public static void SaveUser(User user)
     {
-        // Bug: Not specifying JsonSerializerOptions for DateTime handling
-        // This can cause issues with DateTime Kind (Local/UTC/Unspecified)
-        // and may serialize differently on different systems
-        string json = JsonSerializer.Serialize(user);
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+            // DateTime is serialized in ISO 8601 format by default in System.Text.Json
+        };
+        
+        string json = JsonSerializer.Serialize(user, options);
         File.WriteAllText("user.json", json);
     }
 }
